@@ -82,29 +82,44 @@ content.each { |line|
 
 	
 }
+content.close
 
+subclases_outcome = String.new
+clases_outcome = String.new
+properties_outcome = String.new
+relations_outcome = String.new
 
 printer = RdfsSubclassRelationEntityPrinter.new
 subclasses.each do |entity|
-	print printer.print_rdfs_entity(entity)
+	subclases_outcome +=  printer.print_rdfs_entity(entity)
 	classes.delete(entity.child)
 end
 
 printer = RdfsClassEntityPrinter.new
 classes.each do |entity|
-	print printer.print_rdfs_entity(entity)
+	clases_outcome += printer.print_rdfs_entity(entity)
 end
 
 
 printer = RdfsRelationEntityPrinter.new
 relations.each do |entity|
-	print printer.print_rdfs_entity(entity)
+	relations_outcome += printer.print_rdfs_entity(entity)
 end
 
 printer = RdfsPropertyEntityPrinter.new
 properties.each do |entity|
-	print printer.print_rdfs_entity(entity)
+	properties_outcome += printer.print_rdfs_entity(entity)
 end
+
+result = clases_outcome + subclases_outcome + relations_outcome + properties_outcome
+print result
+
+
+resultFile = File.open("result.txt", "w+"){
+	|file|
+	file.write(result)
+	file.close
+}
 
 =begin
 	
