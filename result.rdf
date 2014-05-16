@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<!DOCTYPE rdf:RDF [<!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#">]>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+		 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdfs:Class rdf:about="animal"></rdfs:Class>
+<rdfs:Class rdf:about="human"></rdfs:Class>
+<rdfs:Class rdf:about="students"></rdfs:Class>
+<rdfs:Class rdf:about="classes"></rdfs:Class>
+<rdfs:Class rdf:about="teacher"></rdfs:Class>
+<rdfs:Class rdf:about="class"></rdfs:Class>
+<rdfs:Class rdf:about="dog">
+		<rdfs:subClassOf rdf:resource="#animal"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="cat">
+		<rdfs:subClassOf rdf:resource="#animal"/>
+</rdfs:Class>
+<rdfs:Class rdf:about="student">
+		<rdfs:subClassOf rdf:resource="#human"/>
+</rdfs:Class>
+<rdfs:Property rdf:about="#participate">
+		<rdfs:domain rdf:resource="#students"/>
+		<rdfs:range rdf:resource="#classes"/>
+</rdfs:Property>
+<rdfs:Property rdf:about="#teaches">
+		<rdfs:domain rdf:resource="#teacher"/>
+		<rdfs:range rdf:resource="#class"/>
+</rdfs:Property>
+<rdfs:Property rdf:about="#belong">
+		<rdfs:domain rdf:resource="#student"/>
+		<rdfs:range rdf:resource="#class"/>
+</rdfs:Property>
+<rdfs:Property rdf:about="#name">
+		<rdfs:domain rdf:resource="#animal"/>
+		<rdfs:range rdf:resource="&rdf;Literal"/>
+</rdfs:Property>
+</rdf:RDF>
