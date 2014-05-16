@@ -13,4 +13,16 @@ class Relation
 		return "[ " + @subject + " " + @name + " " + @object + " ]"
 	end
 
+	def subject
+		@subject
+	end
+
+	def name
+		@name
+	end
+
+	def object
+		@object
+	end
+
 end

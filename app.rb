@@ -2,6 +2,8 @@ require "./Property.rb"
 require "./Relation.rb"
 require "./SubclassRelation.rb"
 require "./RdfsSubclassRelationEntityPrinter.rb"
+require "./RdfsRelationEntityPrinter.rb"
+
 
 def print_simple_array(arr)
 	arr.each do |el|
@@ -72,6 +74,13 @@ subclasses.each do |entity|
 	puts printer.print_rdfs_entity(entity)
 end
 
+printer = RdfsRelationEntityPrinter.new
+relations.each do |entity|
+	puts printer.print_rdfs_entity(entity)
+end
+
+=begin
+	
 puts "classes: "
 print_simple_array(classes)
 puts "relations: "
@@ -81,3 +90,4 @@ print_complex_array(properties)
 puts "subclasses: "
 print_complex_array(subclasses)
 
+=end
