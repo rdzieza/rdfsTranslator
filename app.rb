@@ -4,7 +4,7 @@ require "./SubclassRelation.rb"
 require "./RdfsSubclassRelationEntityPrinter.rb"
 require "./RdfsRelationEntityPrinter.rb"
 require "./RdfsPropertyEntityPrinter.rb"
-
+require "./RdfsClassEntityPrinter.rb"
 
 def print_simple_array(arr)
 	arr.each do |el|
@@ -20,6 +20,12 @@ def print_complex_array(arr)
 	puts ""
 end
 
+def to_lower_case!(arr)
+	arr.each do |el|
+		el.downcase!
+	end
+end
+
 meaningless = [ "the", "a", "an", "in", "to", "at", "with"]
 
 content = File.open("content.txt", "r")
@@ -33,7 +39,8 @@ content.each { |line|
 	line.tr!('.', "") #remove .
 	puts line 
 	words = line.split(" ")	#split into single words
-	
+	words = to_lower_case!(words) #make all letters small
+
 	words.each do |word|
 		if meaningless.include?(word)
 			words.delete(word)		#remove meaningless words
@@ -52,28 +59,42 @@ content.each { |line|
 		when "is" then
 			subclassRelation = SubclassRelation.new(words[2], words[0])
 			subclasses << subclassRelation
+			object = words[2]
+			if !classes.include?(object)   #if class doesnt exist add one
+ 				classes << object
+			end
 		when "has" then
 			property = Property.new(words[0], words[2])
 			properties << property
 		else
 			relation = Relation.new(words[0], words[1], words[2])
 			relations << relation
+			object = words[2]
+			if !classes.include?(object)   #if class doesnt exist add one
+ 				classes << object
+			end
 		end
 
-		object = words[2]
-		if !classes.include?(object)   #if class doesnt exist add one
- 			classes << object
-		end
+		
 	end
+
 
 
 	
 }
 
+
 printer = RdfsSubclassRelationEntityPrinter.new
 subclasses.each do |entity|
 	print printer.print_rdfs_entity(entity)
+	classes.delete(entity.child)
 end
+
+printer = RdfsClassEntityPrinter.new
+classes.each do |entity|
+	print printer.print_rdfs_entity(entity)
+end
+
 
 printer = RdfsRelationEntityPrinter.new
 relations.each do |entity|
