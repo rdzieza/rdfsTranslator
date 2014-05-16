@@ -102,5 +102,3 @@ end
 
 file_writer = ResultRdfsFileWriter.new
 file_writer.write_result(clases_outcome, subclases_outcome, relations_outcome, properties_outcome)
-
-
