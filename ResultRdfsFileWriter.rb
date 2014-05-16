@@ -12,8 +12,8 @@ class ResultRdfsFileWriter
 	@file_name = "result.rdf"
 	end
 
-	def write_result(classes, subclasses, relations, properties)
-		File.open( @file_name , "w+") {
+	def write_result(source, classes, subclasses, relations, properties)
+		File.open(source , "w+") {
 			|file| 
 			file.write(@file_header + classes + subclasses + relations + properties + @file_footer) 
 			file.close

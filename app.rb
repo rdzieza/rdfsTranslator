@@ -30,53 +30,68 @@ def is_singular?(string)
 	string.en.plural.singularize == string
 end
 
-meaningless = [ "the", "a", "an", "in", "to", "at", "with"]
+# Checks if provided class already exists and if not add it to the list
+def add_rdfs_class(class_array, class_name)
+	singular_name = is_singular?(class_name) ? class_name : class_name.singularize
 
-content = File.open("content.txt", "r")
+	if !class_array.include?(singular_name)
+		class_array << singular_name
+	end
+end
+
+# Adds subclass
+def add_rdfs_subclass(subclasses_array, elements)
+	subclasses_array << SubclassRelation.new(elements[2], elements[0])
+end
+
+# Adds relation
+def add_rdfs_relation(relations_array, elements)
+	subclass_verb = is_singular?(elements[0]) ? elements[0] : elements[0].singularize
+	class_verb = is_singular?(elements[2]) ? elements[2] : elements[2].singularize
+
+	relations_array << Relation.new(subclass_verb, elements[1], class_verb)
+end
+
+# Adds property
+def add_rdfs_property(properties_array, elements)
+	properties_array << Property.new(elements[0], elements[2])
+end
+
+
+### Variables and const
+MEANINGLESS = [ "the", "a", "an", "in", "to", "at", "with"]
+
+content = File.open(ARGV[0], "r")
 
 classes = Array.new
 properties = Array.new
 relations = Array.new
 subclasses = Array.new
 
+### Main loop
+
 content.each do |line|
 	line.tr!('.', "") #remove dot from the end of the sentence
-	# puts line 
 	words = line.split(" ").each{ |word| word.downcase!} #split into single words and downcase
-	words = delete_meaningless_words(words, meaningless)
+	words = delete_meaningless_words(words, MEANINGLESS)
 
 	if words.size == 3	#if is a triple
 
-		subject = is_singular?(words[0]) ? words[0] : words[0].singularize
-		if !classes.include?(subject)   #if class doesn't exist add one
- 			classes << subject
-		end
+		add_rdfs_class(classes, words[0]) # add class
 
 		verb = words[1]
 		case verb
 			when "is" then
-				subclassRelation = SubclassRelation.new(words[2], words[0])
-				subclasses << subclassRelation
-				object = is_singular?(words[2]) ? words[2] : words[2].singularize
-				if !classes.include?(object)   #if class doesnt exist add one
-	 				classes << object
-				end
+				add_rdfs_subclass(subclasses, words)
+				add_rdfs_class(classes, words[2])
 			when "has" then
-				property = Property.new(words[0], words[2])
-				properties << property
+				add_rdfs_property(properties, words)
+				add_rdfs_class(classes, words[2])
 			else
-				relation = Relation.new(words[0], words[1], words[2])
-				relations << relation
-				object = is_singular?(words[2]) ? words[2] : words[2].singularize
-				if !classes.include?(object)   #if class doesnt exist add one
-	 				classes << object
-				end
+				add_rdfs_relation(relations, words)
+				add_rdfs_class(classes, words[2])
 		end
 	end
-
-
-p classes
-	
 end
 content.close
 
@@ -108,4 +123,4 @@ properties.each do |entity|
 end
 
 file_writer = ResultRdfsFileWriter.new
-file_writer.write_result(clases_outcome, subclases_outcome, relations_outcome, properties_outcome)
+file_writer.write_result(ARGV[1], clases_outcome, subclases_outcome, relations_outcome, properties_outcome)
