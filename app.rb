@@ -5,20 +5,8 @@ require "./RdfsSubclassRelationEntityPrinter.rb"
 require "./RdfsRelationEntityPrinter.rb"
 require "./RdfsPropertyEntityPrinter.rb"
 require "./RdfsClassEntityPrinter.rb"
+require "./ResultRdfsFileWriter.rb"
 
-def print_simple_array(arr)
-	arr.each do |el|
-		print " " + el
-	end
-	puts ""
-end
-
-def print_complex_array(arr)
-	arr.each do |el|
-		print " " + el.to_s
-	end
-	puts ""
-end
 
 def to_lower_case!(arr)
 	arr.each do |el|
@@ -84,6 +72,7 @@ content.each { |line|
 }
 content.close
 
+
 subclases_outcome = String.new
 clases_outcome = String.new
 properties_outcome = String.new
@@ -111,25 +100,7 @@ properties.each do |entity|
 	properties_outcome += printer.print_rdfs_entity(entity)
 end
 
-result = clases_outcome + subclases_outcome + relations_outcome + properties_outcome
-print result
+file_writer = ResultRdfsFileWriter.new
+file_writer.write_result(clases_outcome, subclases_outcome, relations_outcome, properties_outcome)
 
 
-resultFile = File.open("result.txt", "w+"){
-	|file|
-	file.write(result)
-	file.close
-}
-
-=begin
-	
-puts "classes: "
-print_simple_array(classes)
-puts "relations: "
-print_complex_array(relations)
-puts "properties: "
-print_complex_array(properties)
-puts "subclasses: "
-print_complex_array(subclasses)
-
-=end

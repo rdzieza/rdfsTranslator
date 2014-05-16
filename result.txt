@@ -1,3 +1,6 @@
+<?xml version='1.0'?>
+<rdf:RDF xmlns:rdf='http://w3.org/1999/02/22-rdf-syntax-ns#'
+	   xmlns:rdfs='http://w3.org/2000/01/rdf-schema#'>
 <rdfs:Class rdf:id='animal'></rdfs:Class>
 <rdfs:Class rdf:id='human'></rdfs:Class>
 <rdfs:Class rdf:id='students'></rdfs:Class>
@@ -29,3 +32,4 @@
 		<rdfs:domain rdf:about='#animal'/>
 		<rdfs:range rdf:about='&rdf;Literal'/>
 </rdfs:Property>
+</rdf:RDF>
