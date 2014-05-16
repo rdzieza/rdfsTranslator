@@ -57,6 +57,10 @@ content.each { |line|
 			relations << relation
 		end
 
+		object = words[2]
+		if !classes.include?(object)   #if class doesnt exist add one
+ 			classes << object
+		end
 	end
 
 
