@@ -5,10 +5,8 @@
 
 <rdfs:Class rdf:about="animal"></rdfs:Class>
 <rdfs:Class rdf:about="human"></rdfs:Class>
-<rdfs:Class rdf:about="students"></rdfs:Class>
-<rdfs:Class rdf:about="classes"></rdfs:Class>
-<rdfs:Class rdf:about="teacher"></rdfs:Class>
 <rdfs:Class rdf:about="class"></rdfs:Class>
+<rdfs:Class rdf:about="teacher"></rdfs:Class>
 <rdfs:Class rdf:about="dog">
 		<rdfs:subClassOf rdf:resource="#animal"/>
 </rdfs:Class>

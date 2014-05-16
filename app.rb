@@ -1,3 +1,5 @@
+require "active_support/core_ext/string"
+require "linguistics"
 require "./Property.rb"
 require "./Relation.rb"
 require "./SubclassRelation.rb"
@@ -7,11 +9,25 @@ require "./RdfsPropertyEntityPrinter.rb"
 require "./RdfsClassEntityPrinter.rb"
 require "./ResultRdfsFileWriter.rb"
 
+### Methods
 
-def to_lower_case!(arr)
-	arr.each do |el|
-		el.downcase!
+# Method for deleting words from the array and returning array
+def delete_meaningless_words(words_array, meaningless_array)
+	words = Array.new()
+
+	words_array.each do |word|
+		if !meaningless_array.include?(word)
+			words << word		#remove meaningless words
+		end
 	end
+
+	return words
+end
+
+# Method for checking singularity of word
+def is_singular?(string)
+	Linguistics.use( :en )
+	string.en.plural.singularize == string
 end
 
 meaningless = [ "the", "a", "an", "in", "to", "at", "with"]
@@ -23,55 +39,46 @@ properties = Array.new
 relations = Array.new
 subclasses = Array.new
 
-content.each { |line|
-	line.tr!('.', "") #remove .
-	puts line 
-	words = line.split(" ")	#split into single words
-	words = to_lower_case!(words) #make all letters small
-
-	words.each do |word|
-		if meaningless.include?(word)
-			words.delete(word)		#remove meaningless words
-		end
-	end
+content.each do |line|
+	line.tr!('.', "") #remove dot from the end of the sentence
+	# puts line 
+	words = line.split(" ").each{ |word| word.downcase!} #split into single words and downcase
+	words = delete_meaningless_words(words, meaningless)
 
 	if words.size == 3	#if is a triple
-		
-		subject = words[0]
-		if !classes.include?(subject)   #if class doesnt exist add one
+
+		subject = is_singular?(words[0]) ? words[0] : words[0].singularize
+		if !classes.include?(subject)   #if class doesn't exist add one
  			classes << subject
 		end
 
 		verb = words[1]
 		case verb
-		when "is" then
-			subclassRelation = SubclassRelation.new(words[2], words[0])
-			subclasses << subclassRelation
-			object = words[2]
-			if !classes.include?(object)   #if class doesnt exist add one
- 				classes << object
-			end
-		when "has" then
-			property = Property.new(words[0], words[2])
-			properties << property
-		else
-			relation = Relation.new(words[0], words[1], words[2])
-			relations << relation
-			object = words[2]
-			if !classes.include?(object)   #if class doesnt exist add one
- 				classes << object
-			end
+			when "is" then
+				subclassRelation = SubclassRelation.new(words[2], words[0])
+				subclasses << subclassRelation
+				object = is_singular?(words[2]) ? words[2] : words[2].singularize
+				if !classes.include?(object)   #if class doesnt exist add one
+	 				classes << object
+				end
+			when "has" then
+				property = Property.new(words[0], words[2])
+				properties << property
+			else
+				relation = Relation.new(words[0], words[1], words[2])
+				relations << relation
+				object = is_singular?(words[2]) ? words[2] : words[2].singularize
+				if !classes.include?(object)   #if class doesnt exist add one
+	 				classes << object
+				end
 		end
-
-		
 	end
 
 
-
+p classes
 	
-}
+end
 content.close
-
 
 subclases_outcome = String.new
 clases_outcome = String.new
