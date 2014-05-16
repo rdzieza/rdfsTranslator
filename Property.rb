@@ -11,4 +11,12 @@ class Property
 		return "[ " + @subject + " has a " + @object + " ]"
 	end
 
+	def subject
+		@subject
+	end
+
+	def object
+		@object
+	end
+
 end
