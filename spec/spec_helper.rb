@@ -1,1 +1,2 @@
-require_relative '../SubclassRelation'
+require_relative '../Models/SubclassRelation'
+require_relative '../Models/Property'

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SubclassRelation  do
-	before :each do
+	before :all do
 		@subclass_relation = SubclassRelation.new('animal', 'dog')
 	end
 
