@@ -41,15 +41,18 @@ end
 
 # Adds subclass
 def add_rdfs_subclass(subclasses_array, elements)
-	subclasses_array << SubclassRelation.new(elements[2], elements[0])
+	subclass_noun = is_singular?(elements[0]) ? elements[0] : elements[0].singularize
+	class_noun = is_singular?(elements[2]) ? elements[2] : elements[2].singularize
+
+	subclasses_array << SubclassRelation.new(class_noun, subclass_noun)
 end
 
 # Adds relation
 def add_rdfs_relation(relations_array, elements)
-	subclass_verb = is_singular?(elements[0]) ? elements[0] : elements[0].singularize
-	class_verb = is_singular?(elements[2]) ? elements[2] : elements[2].singularize
+	subclass_noun = is_singular?(elements[0]) ? elements[0] : elements[0].singularize
+	class_noun = is_singular?(elements[2]) ? elements[2] : elements[2].singularize
 
-	relations_array << Relation.new(subclass_verb, elements[1], class_verb)
+	relations_array << Relation.new(subclass_noun, elements[1], class_noun)
 end
 
 # Adds property
@@ -61,7 +64,7 @@ end
 ### Variables and const
 MEANINGLESS = [ "the", "a", "an", "in", "to", "at", "with"]
 
-content = File.open(ARGV[0], "r")
+content = File.open(ARGV[0], "r") # File with english sentences
 
 classes = Array.new
 properties = Array.new
@@ -82,6 +85,9 @@ content.each do |line|
 		verb = words[1]
 		case verb
 			when "is" then
+				add_rdfs_subclass(subclasses, words)
+				add_rdfs_class(classes, words[2])
+			when "are" then
 				add_rdfs_subclass(subclasses, words)
 				add_rdfs_class(classes, words[2])
 			when "has" then

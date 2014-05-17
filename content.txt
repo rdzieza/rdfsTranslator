@@ -1,5 +1,6 @@
 Dog is an animal.
 Cat is an animal.
+Hamsters are animals.
 Animal has a name.
 Student is a human.
 Students participate in classes.
