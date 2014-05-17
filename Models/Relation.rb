@@ -1,7 +1,6 @@
 class Relation
-	@subject
-	@name
-	@object
+	
+	attr_accessor :subject, :object, :name
 
 	def initialize(subject, name, object)
 		@subject = subject
@@ -10,19 +9,7 @@ class Relation
 	end
 
 	def to_s()
-		return "[ " + @subject + " " + @name + " " + @object + " ]"
-	end
-
-	def subject
-		@subject
-	end
-
-	def name
-		@name
-	end
-
-	def object
-		@object
+		return "#{subject} #{name} #{object}"
 	end
 
 end
