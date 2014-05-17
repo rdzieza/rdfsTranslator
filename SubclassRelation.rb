@@ -1,6 +1,6 @@
 class SubclassRelation
-	@parent
-	@child
+	
+	attr_accessor :parent, :child
 
 	def initialize(parent, child)
 		@parent = parent
@@ -8,15 +8,7 @@ class SubclassRelation
 	end
 
 	def to_s()
-		return "[ " + :child + " is a " + :parent + " ]"
-	end
-
-	def parent
-		@parent
-	end
-
-	def child
-		@child
+		return "#{@child} inherits from #{@parent}"
 	end
 
 end
