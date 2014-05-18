@@ -69,8 +69,8 @@ And if your run __rdfst__ on a file like this you'll get in result:
 
 Authors
 -------
-[rdzieza](https://github.com/rdzieza)
-[@cojoj](https://twitter.com/cojoj)
+[Robert Dzieża](https://github.com/rdzieza)  
+[Mateusz Zając](https://github.com/cojoj) [@cojoj](https://twitter.com/cojoj)
 
 License
 ---------
