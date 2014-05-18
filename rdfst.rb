@@ -3,11 +3,7 @@ require "linguistics"
 require "./Models/Property.rb"
 require "./Models/Relation.rb"
 require "./Models/SubclassRelation.rb"
-require "./RdfsSubclassRelationEntityPrinter.rb"
-require "./RdfsRelationEntityPrinter.rb"
-require "./RdfsPropertyEntityPrinter.rb"
-require "./RdfsClassEntityPrinter.rb"
-require "./ResultRdfsFileWriter.rb"
+require "./RDFSPrinter/RDFSPrinter"
 
 ### Methods
 
@@ -92,7 +88,6 @@ content.each do |line|
 				add_rdfs_class(classes, words[2])
 			when "has" then
 				add_rdfs_property(properties, words)
-				add_rdfs_class(classes, words[2])
 			else
 				add_rdfs_relation(relations, words)
 				add_rdfs_class(classes, words[2])
@@ -101,32 +96,5 @@ content.each do |line|
 end
 content.close
 
-subclases_outcome = String.new
-clases_outcome = String.new
-properties_outcome = String.new
-relations_outcome = String.new
-
-printer = RdfsSubclassRelationEntityPrinter.new
-subclasses.each do |entity|
-	subclases_outcome +=  printer.print_rdfs_entity(entity)
-	classes.delete(entity.child)
-end
-
-printer = RdfsClassEntityPrinter.new
-classes.each do |entity|
-	clases_outcome += printer.print_rdfs_entity(entity)
-end
-
-
-printer = RdfsRelationEntityPrinter.new
-relations.each do |entity|
-	relations_outcome += printer.print_rdfs_entity(entity)
-end
-
-printer = RdfsPropertyEntityPrinter.new
-properties.each do |entity|
-	properties_outcome += printer.print_rdfs_entity(entity)
-end
-
-file_writer = ResultRdfsFileWriter.new
-file_writer.write_result(ARGV[1], clases_outcome, subclases_outcome, relations_outcome, properties_outcome)
+printer = RDFSPrinter.new(classes, subclasses, properties, relations)
+printer.write_to_file(ARGV[1])
